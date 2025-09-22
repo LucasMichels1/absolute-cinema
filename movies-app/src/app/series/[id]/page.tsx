@@ -22,8 +22,9 @@ interface Video {
   type: string;
 }
 
-export default async function SeriesDetailsPage({params,}: {params: { id: string };}) {
-  const seriesId = Number(params.id);
+export default async function SeriesDetailsPage({params,}: {params: Promise <{ id: string }> }) {
+  const { id } = await params;
+  const seriesId = Number(id);
   const series: SeriesDetail = await tmdb.getSeriesDetails(seriesId);
   const videos = await tmdb.getSeriesVideos(seriesId);
 
