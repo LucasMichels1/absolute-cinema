@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Movie } from "../app/types/movie";
 import { getImageUrl } from "../app/api/tmdb";
+import Image from "next/image";
 
 interface MovieCardProps {
   movie: Movie;
@@ -17,10 +18,12 @@ export const MovieCard = ({ movie }: MovieCardProps) => (
     href={`/movie/${movie.id}`}
     className="bg-gray-800 rounded-xl overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 group relative"
   >
-    <div className="relative overflow-hidden">
-      <img
+    <div className="relative w-full h-[400px] overflow-hidden">
+      <Image
         src={getImageUrl(movie.poster_path)}
         alt={movie.title}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-110"
       />
 

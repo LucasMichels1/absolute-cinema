@@ -1,4 +1,6 @@
 import { tmdb, getImageUrl } from "@/app/api/tmdb";
+import Image from "next/image";
+import Link from "next/link";
 
 interface SeriesDetail {
   id: number;
@@ -13,26 +15,33 @@ interface SeriesDetail {
   number_of_episodes?: number;
 }
 
+interface Video {
+  id: string;
+  key: string;
+  site: string;
+  type: string;
+}
+
 export default async function SeriesDetailsPage({params,}: {params: { id: string };}) {
   const seriesId = Number(params.id);
   const series: SeriesDetail = await tmdb.getSeriesDetails(seriesId);
   const videos = await tmdb.getSeriesVideos(seriesId);
 
-  // Pega trailer do YouTube, se existir
+  
   const trailer = videos.find(
-    (v: any) => v.type === "Trailer" && v.site === "YouTube"
+    (v: Video) => v.type === "Trailer" && v.site === "YouTube"
   );
 
   if (!series) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
         <h2 className="text-2xl font-bold mb-4">Série não encontrada</h2>
-        <a
+        <Link
           href="/"
           className="px-6 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
         >
           Voltar para Home
-        </a>
+        </Link>
       </div>
     );
   }
@@ -41,9 +50,11 @@ export default async function SeriesDetailsPage({params,}: {params: { id: string
     <div className="min-h-screen bg-gray-900">
       <div className="relative">
         <div className="absolute inset-0">
-          <img
+          <Image
             src={getImageUrl(series.backdrop_path || series.poster_path)}
             alt={series.name}
+            width={1280}
+            height={720}
             className="w-full h-[600px] object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
@@ -52,9 +63,11 @@ export default async function SeriesDetailsPage({params,}: {params: { id: string
         <div className="relative container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-8 pt-[200px]">
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src={getImageUrl(series.poster_path)}
                 alt={series.name}
+                width={500}
+                height={750}
                 className="w-64 rounded-xl shadow-2xl"
               />
             </div>
@@ -101,12 +114,12 @@ export default async function SeriesDetailsPage({params,}: {params: { id: string
                 {series.overview}
               </p>
 
-              <a
+              <Link
                 href="/"
                 className="px-6 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
               >
                 Voltar para Home
-              </a>
+              </Link>
             </div>
           </div>
 

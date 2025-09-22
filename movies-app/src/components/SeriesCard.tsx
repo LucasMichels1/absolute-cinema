@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Series } from "@/app/types/series";
 import { getImageUrl } from "@/app/api/tmdb";
+import Image from "next/image";
 
 interface SeriesCardProps {
   series: Series;
@@ -17,10 +18,12 @@ export const SeriesCard = ({ series }: SeriesCardProps) => (
     href={`/series/${series.id}`}
     className="bg-gray-800 rounded-xl overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 group relative block"
   >
-    <div className="relative overflow-hidden">
-      <img
+    <div className="relative w-full h-[400px] overflow-hidden">
+      <Image
         src={getImageUrl(series.poster_path)}
         alt={series.name}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-110"
       />
 
